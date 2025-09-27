@@ -18,10 +18,16 @@
   --accent-foreground: #3c3d37;
   --destructive: #c17358;
   --destructive-foreground: #ffffff;
+  --orange: #d17a47;
+  --orange-foreground: #ffffff;
+  --orange-light: #f4e8e0;
+  --orange-dark: #b8633a;
   --border: rgba(107, 123, 86, 0.15);
   --input: transparent;
   --input-background: #f5f4f0;
   --switch-background: #c7c5bd;
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
   --ring: #6b7b56;
@@ -58,9 +64,15 @@
   --accent-foreground: #f5f4f0;
   --destructive: #d4805c;
   --destructive-foreground: #2d2f2a;
+  --orange: #e68a5a;
+  --orange-foreground: #2d2f2a;
+  --orange-light: #4a3d36;
+  --orange-dark: #f19967;
   --border: rgba(139, 148, 113, 0.2);
   --input: #454940;
   --ring: #8b9471;
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
   --chart-1: #8b9471;
@@ -95,6 +107,10 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-orange: var(--orange);
+  --color-orange-foreground: var(--orange-foreground);
+  --color-orange-light: var(--orange-light);
+  --color-orange-dark: var(--orange-dark);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-input-background: var(--input-background);
@@ -143,26 +159,26 @@
   :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
     h1 {
       font-size: var(--text-2xl);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
+      font-weight: var(--font-weight-bold);
+      line-height: 1.4;
     }
 
     h2 {
       font-size: var(--text-xl);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
+      font-weight: var(--font-weight-bold);
+      line-height: 1.4;
     }
 
     h3 {
       font-size: var(--text-lg);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.4;
     }
 
     h4 {
       font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.4;
     }
 
     p {

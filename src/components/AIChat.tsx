@@ -8,6 +8,7 @@ import { Send, Bot, User, Calendar, MapPin, Users, Clock, Sparkles } from 'lucid
 import { UserProfile } from '../App';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { SmallDecorationIllustration, AIBrainIllustration } from './Illustrations';
+import { EVENTS_DATA, Event, findEventsByKeywords } from './EventsData';
 
 interface Message {
   id: string;
@@ -60,68 +61,115 @@ I'll find other students with similar preferences and help coordinate the perfec
   const simulateAIResponse = (userMessage: string): Message => {
     const lowerMessage = userMessage.toLowerCase();
     
-    if (lowerMessage.includes('football') || lowerMessage.includes('game')) {
+    // Define keywords for different activity types
+    const activityKeywords = {
+      hike: ['hike', 'hiking', 'trail', 'walk', 'nature', 'outdoor'],
+      sports: ['football', 'game', 'sport', 'watch party', 'gt', 'uga'],
+      study: ['study', 'cs', '2110', 'academic', 'homework', 'exam'],
+      social: ['party', 'social', 'mixer', 'friends', 'meet people'],
+      yoga: ['yoga', 'meditation', 'zen', 'peaceful', 'relaxation'],
+      cooking: ['cook', 'food', 'recipe', 'kitchen', 'chef'],
+      gaming: ['game', 'board', 'strategy', 'cards', 'play'],
+      music: ['music', 'jam', 'acoustic', 'guitar', 'sing'],
+      art: ['art', 'paint', 'draw', 'creative', 'artistic'],
+      tech: ['tech', 'coding', 'hackathon', 'programming', 'ai'],
+      movies: ['movie', 'film', 'cinema', 'watch'],
+      reading: ['book', 'read', 'literature', 'club'],
+      dance: ['dance', 'salsa', 'movement'],
+      photography: ['photo', 'camera', 'picture', 'photography'],
+      travel: ['travel', 'trip', 'vacation', 'adventure']
+    };
+    
+    // Find matching events based on keywords
+    let recommendedEvent: Event | null = null;
+    let activityType = '';
+    
+    for (const [activity, keywords] of Object.entries(activityKeywords)) {
+      if (keywords.some(keyword => lowerMessage.includes(keyword))) {
+        const matchingEvents = findEventsByKeywords(EVENTS_DATA, keywords);
+        if (matchingEvents.length > 0) {
+          recommendedEvent = matchingEvents[0]; // Get the first match
+          activityType = activity;
+          break;
+        }
+      }
+    }
+    
+    // If we found a matching event, recommend it specifically
+    if (recommendedEvent) {
+      const responses = {
+        hike: "Perfect! I found a hiking event that matches what you're looking for. This is a great way to start your day and meet fellow outdoor enthusiasts:",
+        sports: "Great choice! I found the perfect sports event for you. Based on your interests, here's what I've found:",
+        study: "Excellent! I found a study group that aligns with your academic needs. Here's what I can arrange:",
+        social: "I understand you're looking for social events! I found a perfect match for meeting new people:",
+        yoga: "Wonderful! I found a peaceful yoga session that would be perfect for relaxation and wellness:",
+        cooking: "Amazing! I found a hands-on cooking experience where you can learn new skills and meet fellow food enthusiasts:",
+        gaming: "Great choice! I found a fun gaming event where you can discover new games and meet fellow strategists:",
+        music: "Perfect! I found a music event where you can express your creativity and connect with other musicians:",
+        art: "Wonderful! I found an artistic workshop where you can explore your creativity and meet fellow artists:",
+        tech: "Excellent! I found a technology event that matches your interests perfectly:",
+        movies: "Great idea! I found a movie event that would be perfect for a relaxing evening:",
+        reading: "Perfect! I found a book club that aligns with your literary interests:",
+        dance: "Wonderful! I found a dance workshop that would be perfect for learning and having fun:",
+        photography: "Great choice! I found a photography event where you can explore campus and meet fellow photographers:",
+        travel: "Excellent! I found a travel planning event where you can connect with fellow adventurers:"
+      };
+      
       return {
         id: Date.now().toString(),
         type: 'ai',
-        content: "Great choice! I found several students interested in watching the Georgia Tech vs UGA game. Based on your preferences and theirs, I'm proposing a watch party. Here's what I've organized:",
+        content: responses[activityType as keyof typeof responses] || "I found an event that matches your request perfectly:",
         timestamp: new Date(),
         eventProposal: {
-          title: "GT vs UGA Watch Party",
-          description: "Watch the big rivalry game with fellow Yellow Jackets! Pizza and drinks provided.",
-          suggestedTime: "Saturday, Nov 25, 3:30 PM",
-          location: "Student Center - Main Lounge",
-          matchedUsers: 8,
-          confidence: 95
+          title: recommendedEvent.title,
+          description: recommendedEvent.description,
+          suggestedTime: `${recommendedEvent.date}, ${recommendedEvent.time}`,
+          location: recommendedEvent.location,
+          matchedUsers: recommendedEvent.attendees,
+          confidence: 92
         }
       };
     }
     
-    if (lowerMessage.includes('study') || lowerMessage.includes('cs') || lowerMessage.includes('2110')) {
+    // Fallback: suggest events based on user interests
+    const userInterestEvents = EVENTS_DATA.filter(event => 
+      event.tags.some(tag => 
+        userProfile.interests.some(interest => 
+          interest.toLowerCase() === tag.toLowerCase()
+        )
+      )
+    );
+    
+    if (userInterestEvents.length > 0) {
+      const suggestedEvent = userInterestEvents[0];
       return {
         id: Date.now().toString(),
         type: 'ai',
-        content: "Perfect timing! I found other CS 2110 students looking for study partners. Based on your academic interests and study preferences, here's a study group I can organize:",
+        content: `I'm processing your request for "${userMessage}"! Based on your interests in ${userProfile.interests.slice(0, 2).join(' and ')}, I found this event that might interest you:`,
         timestamp: new Date(),
         eventProposal: {
-          title: "CS 2110 Study Group",
-          description: "Collaborative study session focusing on data structures and algorithms. Bring your laptops!",
-          suggestedTime: "Thursday, Nov 23, 7:00 PM",
-          location: "Klaus Building - Study Room 2425",
-          matchedUsers: 5,
-          confidence: 88
+          title: suggestedEvent.title,
+          description: suggestedEvent.description,
+          suggestedTime: `${suggestedEvent.date}, ${suggestedEvent.time}`,
+          location: suggestedEvent.location,
+          matchedUsers: suggestedEvent.attendees,
+          confidence: 85
         }
       };
     }
     
-    if (lowerMessage.includes('party') || lowerMessage.includes('social')) {
-      return {
-        id: Date.now().toString(),
-        type: 'ai',
-        content: "I understand you're looking for social events! Based on your preferences for group size and social activities, I found a great match:",
-        timestamp: new Date(),
-        eventProposal: {
-          title: "Friday Night Social Mixer",
-          description: "Meet new people in a casual, fun environment. Music, games, and great conversations!",
-          suggestedTime: "Friday, Nov 24, 8:00 PM",
-          location: "Student Activities Center",
-          matchedUsers: 12,
-          confidence: 82
-        }
-      };
-    }
-    
+    // Final fallback: general response
     return {
       id: Date.now().toString(),
       type: 'ai',
-      content: `I'm analyzing your request for "${userMessage}" and looking for students with similar interests and compatible preferences. Let me check what events I can organize for you! 
+      content: `I'm processing your request for "${userMessage}"! Based on your profile preferences, here are some general event suggestions I can organize:
 
-Based on your profile, I'm considering:
-• Your preference for ${userProfile.preferences.groupSize} groups
-• Your ${userProfile.preferences.timePreference} time preference  
-• Your interests in ${userProfile.interests.slice(0, 3).join(', ')}
+• Study groups for ${userProfile.interests.includes('Technology') ? 'CS/tech courses' : 'academic subjects'}
+• Social mixers matching your ${userProfile.preferences.groupSize} group preference
+• Sports watch parties or recreational activities
+• Interest-based meetups for ${userProfile.interests.slice(0, 2).join(' and ')}
 
-I'll have some options for you shortly! 🎯`,
+Would you like me to set up any of these, or do you have something more specific in mind? Just let me know!`,
       timestamp: new Date()
     };
   };
@@ -140,12 +188,12 @@ I'll have some options for you shortly! 🎯`,
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate AI processing time
+    // Simulate AI processing time - much faster response
     setTimeout(() => {
       const aiResponse = simulateAIResponse(inputValue);
       setMessages(prev => [...prev, aiResponse]);
       setIsTyping(false);
-    }, 2000);
+    }, 1000);
   };
 
   const handleConfirmEvent = (eventProposal: any) => {

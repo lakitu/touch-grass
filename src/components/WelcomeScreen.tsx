@@ -1,14 +1,15 @@
 import React from 'react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
-import { Users, Calendar, Sparkles, Bot } from 'lucide-react';
-import { WelcomeIllustration, PeopleConnectingIllustration, AIBrainIllustration, SmallDecorationIllustration } from './Illustrations';
+import { Users, Calendar, Sparkles, Bot, Sprout } from 'lucide-react';
+import { WelcomeIllustration, PeopleConnectingIllustration, SmartOrganizationIllustration, CommunityIllustration, SmallDecorationIllustration } from './Illustrations';
 
 interface WelcomeScreenProps {
-  onNext: () => void;
+  onLogin: () => void;
+  onSignup: () => void;
 }
 
-export function WelcomeScreen({ onNext }: WelcomeScreenProps) {
+export function WelcomeScreen({ onLogin, onSignup }: WelcomeScreenProps) {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 texture-paper relative overflow-hidden">
       {/* Background decorations */}
@@ -27,16 +28,16 @@ export function WelcomeScreen({ onNext }: WelcomeScreenProps) {
       
       <Card className="max-w-2xl w-full p-8 text-center texture-organic shadow-natural border-organic relative z-10">
         <div className="mb-6 flex justify-center">
-          <WelcomeIllustration className="w-80 h-60" />
+          <WelcomeIllustration className="w-full h-50" />
         </div>
         
-        <div className="flex justify-center mb-4">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center border-organic grass-decoration">
-            <Bot className="w-8 h-8 text-primary" />
+        <div className="flex items-center justify-center space-x-3 mb-4">
+          <div className="relative">
+            <Sprout className="w-10 h-10 text-primary" />
+            <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary/30"></div>
           </div>
+          <h1 className="text-4xl font-medium text-primary tracking-wide">Touch Grass</h1>
         </div>
-        
-        <h1 className="text-3xl text-foreground mb-4">Touch Grass</h1>
         <p className="text-lg text-muted-foreground mb-8">
           Step outside your comfort zone and into real connections. 
           New to campus? Let us help you find events and people that match your vibe.
@@ -45,7 +46,9 @@ export function WelcomeScreen({ onNext }: WelcomeScreenProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="flex flex-col items-center p-4 bg-accent/20 rounded-lg border-organic texture-grass">
             <div className="mb-3">
-              <PeopleConnectingIllustration className="w-16 h-16" />
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
+                <PeopleConnectingIllustration className="w-14 h-14" />
+              </div>
             </div>
             <h3 className="text-foreground mb-2">AI-Powered Matching</h3>
             <p className="text-sm text-muted-foreground">
@@ -53,9 +56,11 @@ export function WelcomeScreen({ onNext }: WelcomeScreenProps) {
             </p>
           </div>
           
-          <div className="flex flex-col items-center p-4 bg-accent/20 rounded-lg border-organic texture-organic">
+          <div className="flex flex-col items-center p-4 bg-accent/20 rounded-lg border-organic texture-wood">
             <div className="mb-3">
-              <AIBrainIllustration className="w-16 h-16" />
+              <div className="w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center border-2 border-orange/20">
+                <SmartOrganizationIllustration className="w-14 h-14 flex-shrink-0" />
+              </div>
             </div>
             <h3 className="text-foreground mb-2">Smart Organization</h3>
             <p className="text-sm text-muted-foreground">
@@ -64,7 +69,11 @@ export function WelcomeScreen({ onNext }: WelcomeScreenProps) {
           </div>
           
           <div className="flex flex-col items-center p-4 bg-accent/20 rounded-lg border-organic texture-stone">
-            <Calendar className="w-8 h-8 text-primary mb-4" />
+            <div className="mb-3">
+              <div className="w-16 h-16 bg-orange/10 rounded-full flex items-center justify-center border-2 border-orange/20">
+                <CommunityIllustration className="w-14 h-14 flex-shrink-0" />
+              </div>
+            </div>
             <h3 className="text-foreground mb-2">Community First</h3>
             <p className="text-sm text-muted-foreground">
               Join your college community and meet people who share your interests in real life
@@ -72,13 +81,28 @@ export function WelcomeScreen({ onNext }: WelcomeScreenProps) {
           </div>
         </div>
         
-        <Button 
-          onClick={onNext}
-          size="lg"
-          className="w-full md:w-auto px-8"
-        >
-          Get Started
-        </Button>
+        <div className="space-y-4">
+          <Button 
+            onClick={onSignup}
+            size="lg"
+            className="w-full md:w-80 px-8 bg-primary hover:bg-primary/90 shadow-lg"
+          >
+            Create Account
+          </Button>
+          
+          <div className="text-center">
+            <p className="text-sm text-muted-foreground mb-2">
+              Already have an account?
+            </p>
+            <Button 
+              onClick={onLogin}
+              size="lg"
+              className="w-full md:w-80 px-8 bg-orange text-orange-foreground hover:bg-orange/90 shadow-lg"
+            >
+              Sign In
+            </Button>
+          </div>
+        </div>
       </Card>
     </div>
   );

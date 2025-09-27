@@ -1,21 +1,31 @@
 import React, { useState } from 'react';
 import { AIChat } from './AIChat';
 import { EventFeed } from './EventFeed';
+import { Calendar, CalendarEvent } from './Calendar';
 import { ProfileSidebar } from './ProfileSidebar';
 import { EventConfirmationNotification } from './EventConfirmationNotification';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Bell, Menu, X, Calendar, MessageCircle, Home } from 'lucide-react';
+import { Bell, Menu, X, Calendar as CalendarIcon, MessageCircle, CalendarDays } from 'lucide-react';
 import { UserProfile } from '../App';
+import { Event } from './EventsData';
 import { SmallDecorationIllustration } from './Illustrations';
 
 interface DashboardProps {
   userProfile: UserProfile;
   onProfileEdit: () => void;
+  onLogout: () => void;
+  onJoinGroupChat?: (eventId: string) => void;
+  calendarEvents: CalendarEvent[];
+  eventRSVPs: Record<string, { isInterested: boolean; isAttending: boolean }>;
+  onAddToCalendar: (event: Event) => void;
+  onRemoveFromCalendar: (eventId: string) => void;
+  onExportCalendar: () => void;
+  onUpdateRSVP: (eventId: string, rsvpStatus: { isInterested: boolean; isAttending: boolean }) => void;
 }
 
-export function Dashboard({ userProfile, onProfileEdit }: DashboardProps) {
+export function Dashboard({ userProfile, onProfileEdit, onLogout, onJoinGroupChat, calendarEvents, eventRSVPs, onAddToCalendar, onRemoveFromCalendar, onExportCalendar, onUpdateRSVP }: DashboardProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('events');
   const [notifications, setNotifications] = useState([
@@ -44,16 +54,21 @@ export function Dashboard({ userProfile, onProfileEdit }: DashboardProps) {
     venue: 'Student Center - Main Lounge, 353 Ferst Dr NW, Atlanta, GA 30313',
     attendees: 12,
     image: 'https://images.unsplash.com/photo-1547055648-bc6fdb42d168?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnZW9yZ2lhJTIwdGVjaCUyMGZvb3RiYWxsJTIwc3RhZGl1bXxlbnwxfHx8fDE3NTg5ODE5NjZ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    organizerMessage: 'Hey everyone! So excited to watch the big game together. Pizza will be delivered at 3:00 PM, and we\'ll have drinks and snacks throughout. Come early to get the best seats!',
+    reminders: [
+      'Come early for better seats!',
+      'Bring your own snacks and drinks',
+      'Wear your Yellow Jacket gear to show team spirit',
+      'Arrive 15 minutes early to meet other participants',
+      'BYOB (Bring Your Own Beverage) - no alcohol on campus'
+    ],
     lastMinuteDetails: [
-      'Pizza delivery confirmed for 3:00 PM',
-      'Big screen TV reserved for the main lounge',
-      'Bring your Yellow Jacket spirit!',
-      'Parking available in the Student Center deck'
+      'Main lounge big screen confirmed and reserved',
+      'All 12 participants have been notified and confirmed',
+      'Suggest carpooling - contact info shared with participants',
+      'Parking available in the Student Center deck (free on weekends)'
     ],
     weatherInfo: 'Perfect day for the game! Sunny and 68°F',
-    parkingInfo: 'Free parking available in Student Center deck. Entrance on Ferst Drive.',
-    contactInfo: 'Questions? Text the organizer at (404) 555-0123'
+    parkingInfo: 'Free parking available in Student Center deck. Entrance on Ferst Drive.'
   });
   
   const [showEventConfirmation, setShowEventConfirmation] = useState(true);
@@ -62,9 +77,25 @@ export function Dashboard({ userProfile, onProfileEdit }: DashboardProps) {
     setNotifications(notifications.filter(n => n.id !== id));
   };
 
-  const handleAddToCalendar = (event: any) => {
-    console.log('Adding to calendar:', event);
-    // In a real app, this would integrate with calendar APIs
+  const handleAddToCalendarFromConfirmation = (eventConfirmation: any) => {
+    // Convert EventConfirmation to Event format
+    const event: Event = {
+      id: eventConfirmation.id,
+      title: eventConfirmation.title,
+      description: `Watch the big rivalry game with fellow Yellow Jackets! Pizza and drinks provided.`,
+      date: eventConfirmation.date,
+      time: eventConfirmation.time,
+      location: eventConfirmation.location,
+      organizer: 'AI Organized',
+      attendees: eventConfirmation.attendees,
+      maxAttendees: 15,
+      tags: ['Sports', 'Social', 'Food'],
+      image: eventConfirmation.image,
+      isInterested: true,
+      isAttending: true
+    };
+    
+    onAddToCalendar(event);
   };
 
   const handleGetDirections = (venue: string) => {
@@ -126,7 +157,7 @@ export function Dashboard({ userProfile, onProfileEdit }: DashboardProps) {
               <X className="w-5 h-5" />
             </Button>
           </div>
-          <ProfileSidebar userProfile={userProfile} onEdit={onProfileEdit} />
+          <ProfileSidebar userProfile={userProfile} onEdit={onProfileEdit} onLogout={onLogout} />
         </div>
 
         {/* Overlay for mobile */}
@@ -145,8 +176,10 @@ export function Dashboard({ userProfile, onProfileEdit }: DashboardProps) {
               <EventConfirmationNotification
                 confirmation={eventConfirmation}
                 onDismiss={() => setShowEventConfirmation(false)}
-                onAddToCalendar={handleAddToCalendar}
+                onAddToCalendar={handleAddToCalendarFromConfirmation}
                 onGetDirections={handleGetDirections}
+                onJoinGroupChat={onJoinGroupChat}
+                calendarEvents={calendarEvents}
               />
             </div>
           )}
@@ -191,21 +224,41 @@ export function Dashboard({ userProfile, onProfileEdit }: DashboardProps) {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
               <TabsList className="grid w-full grid-cols-3 mb-4 bg-accent/50 border-organic">
                 <TabsTrigger value="events" className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
+                  <CalendarDays className="w-4 h-4" />
                   Events
+                </TabsTrigger>
+                <TabsTrigger value="calendar" className="flex items-center gap-2">
+                  <CalendarIcon className="w-4 h-4" />
+                  My Calendar
+                  {calendarEvents.length > 0 && (
+                    <span className="ml-1 bg-primary text-primary-foreground text-xs rounded-full px-1.5 py-0.5 min-w-[1.25rem] h-5 flex items-center justify-center">
+                      {calendarEvents.length}
+                    </span>
+                  )}
                 </TabsTrigger>
                 <TabsTrigger value="chat" className="flex items-center gap-2">
                   <MessageCircle className="w-4 h-4" />
                   AI Chat
                 </TabsTrigger>
-                <TabsTrigger value="home" className="flex items-center gap-2">
-                  <Home className="w-4 h-4" />
-                  Home
-                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="events" className="flex-1 mt-0">
-                <EventFeed userProfile={userProfile} />
+                <EventFeed 
+                  userProfile={userProfile} 
+                  onSwitchToAIChat={() => setActiveTab('chat')}
+                  calendarEvents={calendarEvents}
+                  eventRSVPs={eventRSVPs}
+                  onAddToCalendar={onAddToCalendar}
+                  onUpdateRSVP={onUpdateRSVP}
+                />
+              </TabsContent>
+
+              <TabsContent value="calendar" className="flex-1 mt-0">
+                <Calendar 
+                  calendarEvents={calendarEvents}
+                  onRemoveFromCalendar={onRemoveFromCalendar}
+                  onExportCalendar={onExportCalendar}
+                />
               </TabsContent>
 
               <TabsContent value="chat" className="flex-1 mt-0">
@@ -214,33 +267,7 @@ export function Dashboard({ userProfile, onProfileEdit }: DashboardProps) {
                 </div>
               </TabsContent>
 
-              <TabsContent value="home" className="flex-1 mt-0">
-                <div className="h-full flex items-center justify-center">
-                  <Card className="max-w-md p-8 text-center texture-organic border-organic shadow-natural">
-                    <h3 className="text-lg text-foreground mb-4">Welcome to Touch Grass!</h3>
-                    <p className="text-sm text-muted-foreground mb-6">
-                      Ready to explore campus events and meet new people? Check out the Events tab or chat with our AI to find your perfect activity.
-                    </p>
-                    <div className="space-y-3">
-                      <Button 
-                        onClick={() => setActiveTab('events')} 
-                        className="w-full border-organic"
-                      >
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Browse Events
-                      </Button>
-                      <Button 
-                        onClick={() => setActiveTab('chat')} 
-                        variant="outline" 
-                        className="w-full border-organic"
-                      >
-                        <MessageCircle className="w-4 h-4 mr-2" />
-                        Chat with AI
-                      </Button>
-                    </div>
-                  </Card>
-                </div>
-              </TabsContent>
+
             </Tabs>
           </div>
         </div>

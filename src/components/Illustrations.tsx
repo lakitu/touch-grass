@@ -185,6 +185,108 @@ export const WelcomeIllustration = ({ className = "w-64 h-48" }: { className?: s
   </svg>
 );
 
+export const SmartOrganizationIllustration = ({ className = "w-28 h-28" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="organizationGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#d17a47" />
+        <stop offset="50%" stopColor="#c17358" />
+        <stop offset="100%" stopColor="#b8633a" />
+      </linearGradient>
+    </defs>
+    
+    {/* Central organizing hub/calendar */}
+    <rect x="35" y="30" width="30" height="35" rx="4" fill="url(#organizationGradient)" opacity="0.8"/>
+    
+    {/* Calendar grid lines */}
+    <line x1="40" y1="35" x2="60" y2="35" stroke="#e3e1d9" strokeWidth="1" opacity="0.7"/>
+    <line x1="40" y1="40" x2="60" y2="40" stroke="#e3e1d9" strokeWidth="1" opacity="0.7"/>
+    <line x1="40" y1="45" x2="60" y2="45" stroke="#e3e1d9" strokeWidth="1" opacity="0.7"/>
+    <line x1="40" y1="50" x2="60" y2="50" stroke="#e3e1d9" strokeWidth="1" opacity="0.7"/>
+    <line x1="40" y1="55" x2="60" y2="55" stroke="#e3e1d9" strokeWidth="1" opacity="0.7"/>
+    
+    <line x1="45" y1="30" x2="45" y2="65" stroke="#e3e1d9" strokeWidth="1" opacity="0.7"/>
+    <line x1="55" y1="30" x2="55" y2="65" stroke="#e3e1d9" strokeWidth="1" opacity="0.7"/>
+    
+    {/* Event dots on calendar */}
+    <circle cx="42" cy="37" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="52" cy="42" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="58" cy="47" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="47" cy="52" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    
+    {/* Floating organized event cards */}
+    <rect x="15" y="20" width="12" height="8" rx="2" fill="#8b9471" opacity="0.7"/>
+    <rect x="73" y="25" width="12" height="8" rx="2" fill="#6b7b56" opacity="0.7"/>
+    <rect x="20" y="70" width="12" height="8" rx="2" fill="#a8b08a" opacity="0.7"/>
+    <rect x="68" y="65" width="12" height="8" rx="2" fill="#8b9471" opacity="0.7"/>
+    
+    {/* Organization arrows pointing to center */}
+    <path d="M27 24 Q32 27 35 35" stroke="#e3e1d9" strokeWidth="2" strokeDasharray="2,2" opacity="0.6" markerEnd="url(#arrowhead)"/>
+    <path d="M73 29 Q68 32 65 35" stroke="#e3e1d9" strokeWidth="2" strokeDasharray="2,2" opacity="0.6"/>
+    <path d="M26 74 Q32 70 35 65" stroke="#e3e1d9" strokeWidth="2" strokeDasharray="2,2" opacity="0.6"/>
+    <path d="M68 69 Q65 68 65 65" stroke="#e3e1d9" strokeWidth="2" strokeDasharray="2,2" opacity="0.6"/>
+    
+    {/* Smart organization symbol - gear/cog in center */}
+    <circle cx="50" cy="47" r="5" fill="#e3e1d9" opacity="0.3"/>
+    <path d="M47 44 L53 44 L53 50 L47 50 Z" fill="#e3e1d9" opacity="0.8"/>
+    <circle cx="50" cy="47" r="2" fill="url(#organizationGradient)" opacity="0.9"/>
+    
+    {/* Decorative organizing elements */}
+    <circle cx="10" cy="45" r="2" fill="#c17358" opacity="0.5"/>
+    <circle cx="90" cy="50" r="2" fill="#8b9471" opacity="0.5"/>
+    <rect x="12" y="55" width="3" height="3" fill="#e3e1d9" opacity="0.6" transform="rotate(45 13.5 56.5)"/>
+    <rect x="85" y="35" width="3" height="3" fill="#e3e1d9" opacity="0.6" transform="rotate(45 86.5 36.5)"/>
+  </svg>
+);
+
+export const CommunityIllustration = ({ className = "w-28 h-28" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="communityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#d17a47" />
+        <stop offset="50%" stopColor="#c17358" />
+        <stop offset="100%" stopColor="#b8633a" />
+      </linearGradient>
+    </defs>
+    
+    {/* Central building/community space */}
+    <rect x="35" y="40" width="30" height="25" rx="3" fill="url(#communityGradient)" opacity="0.7"/>
+    <rect x="40" y="35" width="20" height="5" rx="2" fill="#e3e1d9" opacity="0.8"/>
+    
+    {/* People around the community space */}
+    <circle cx="20" cy="35" r="5" fill="#8b9471" opacity="0.8"/>
+    <rect x="16" y="39" width="8" height="12" rx="4" fill="#8b9471" opacity="0.8"/>
+    
+    <circle cx="80" cy="38" r="5" fill="#6b7b56" opacity="0.8"/>
+    <rect x="76" y="42" width="8" height="12" rx="4" fill="#6b7b56" opacity="0.8"/>
+    
+    <circle cx="50" cy="20" r="5" fill="#a8b08a" opacity="0.8"/>
+    <rect x="46" y="24" width="8" height="12" rx="4" fill="#a8b08a" opacity="0.8"/>
+    
+    <circle cx="25" cy="70" r="5" fill="#c17358" opacity="0.8"/>
+    <rect x="21" y="74" width="8" height="12" rx="4" fill="#c17358" opacity="0.8"/>
+    
+    <circle cx="75" cy="72" r="5" fill="#8b9471" opacity="0.8"/>
+    <rect x="71" y="76" width="8" height="12" rx="4" fill="#8b9471" opacity="0.8"/>
+    
+    {/* Connection paths to community center */}
+    <path d="M28 40 Q35 38 35 45" stroke="#e3e1d9" strokeWidth="2" strokeDasharray="2,2" opacity="0.6"/>
+    <path d="M72 45 Q68 42 65 45" stroke="#e3e1d9" strokeWidth="2" strokeDasharray="2,2" opacity="0.6"/>
+    <path d="M50 35 Q50 38 50 40" stroke="#e3e1d9" strokeWidth="2" strokeDasharray="2,2" opacity="0.6"/>
+    <path d="M30 75 Q35 70 35 65" stroke="#e3e1d9" strokeWidth="2" strokeDasharray="2,2" opacity="0.6"/>
+    <path d="M70 75 Q68 70 65 65" stroke="#e3e1d9" strokeWidth="2" strokeDasharray="2,2" opacity="0.6"/>
+    
+    {/* Community symbol - heart in center */}
+    <path d="M45 50 C45 48, 47 47, 49 48 C51 47, 53 48, 53 50 C53 52, 49 55, 49 55 C49 55, 45 52, 45 50 Z" 
+          fill="#e3e1d9" opacity="0.9"/>
+    
+    {/* Decorative elements */}
+    <circle cx="15" cy="55" r="2" fill="#c17358" opacity="0.5"/>
+    <circle cx="85" cy="60" r="2" fill="#8b9471" opacity="0.5"/>
+    <circle cx="50" cy="80" r="1.5" fill="#e3e1d9" opacity="0.7"/>
+  </svg>
+);
+
 export const SmallDecorationIllustration = ({ className = "w-8 h-8" }: { className?: string }) => (
   <svg className={className} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M10 20 Q15 10 20 20" stroke="#8b9471" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.6"/>
@@ -193,3 +295,103 @@ export const SmallDecorationIllustration = ({ className = "w-8 h-8" }: { classNa
     <circle cx="18" cy="12" r="1" fill="#c17358" opacity="0.7"/>
   </svg>
 );
+
+export const TreeSilhouette = ({ className = "w-24 h-24" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="treeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#8b9471" />
+        <stop offset="100%" stopColor="#6b7b56" />
+      </linearGradient>
+    </defs>
+    {/* Tree trunk */}
+    <rect x="45" y="60" width="10" height="30" fill="#6b7b56" opacity="0.8"/>
+    {/* Tree canopy */}
+    <ellipse cx="50" cy="45" rx="25" ry="20" fill="url(#treeGradient)" opacity="0.7"/>
+    <ellipse cx="50" cy="35" rx="20" ry="15" fill="url(#treeGradient)" opacity="0.6"/>
+    <ellipse cx="50" cy="25" rx="15" ry="12" fill="url(#treeGradient)" opacity="0.5"/>
+  </svg>
+);
+
+export const FlowerBunch = ({ className = "w-20 h-20" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Flower stems */}
+    <path d="M25 60 Q30 40 35 60" stroke="#6b7b56" strokeWidth="2" fill="none" strokeLinecap="round"/>
+    <path d="M45 65 Q50 45 55 65" stroke="#8b9471" strokeWidth="2" fill="none" strokeLinecap="round"/>
+    <path d="M35 62 Q40 42 45 62" stroke="#6b7b56" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+    
+    {/* Flower heads */}
+    <circle cx="35" cy="35" r="4" fill="#c17358" opacity="0.8"/>
+    <circle cx="32" cy="32" r="2" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="38" cy="32" r="2" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="32" cy="38" r="2" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="38" cy="38" r="2" fill="#e3e1d9" opacity="0.9"/>
+    
+    <circle cx="55" cy="40" r="3" fill="#a8b08a" opacity="0.8"/>
+    <circle cx="53" cy="38" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="57" cy="38" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="53" cy="42" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="57" cy="42" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    
+    <circle cx="45" cy="37" r="3.5" fill="#8b9471" opacity="0.8"/>
+    <circle cx="43" cy="35" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="47" cy="35" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="43" cy="39" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+    <circle cx="47" cy="39" r="1.5" fill="#e3e1d9" opacity="0.9"/>
+  </svg>
+);
+
+export const GrassCluster = ({ className = "w-16 h-16" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Grass blades */}
+    <path d="M15 45 Q20 25 25 45" stroke="#6b7b56" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+    <path d="M25 50 Q30 30 35 50" stroke="#8b9471" strokeWidth="3" fill="none" strokeLinecap="round"/>
+    <path d="M35 47 Q40 27 45 47" stroke="#6b7b56" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+    <path d="M10 40 Q15 25 20 40" stroke="#8b9471" strokeWidth="2" fill="none" strokeLinecap="round"/>
+    <path d="M40 52 Q45 32 50 52" stroke="#6b7b56" strokeWidth="2" fill="none" strokeLinecap="round"/>
+    <path d="M20 48 Q25 33 30 48" stroke="#8b9471" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+    <path d="M30 44 Q35 29 40 44" stroke="#6b7b56" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+  </svg>
+);
+
+export const LeafPattern = ({ className = "w-32 h-32" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#8b9471" />
+        <stop offset="50%" stopColor="#6b7b56" />
+        <stop offset="100%" stopColor="#a8b08a" />
+      </linearGradient>
+    </defs>
+    {/* Large leaves */}
+    <path d="M30 40 Q50 20, 70 40 Q50 60, 30 40" fill="url(#leafGradient)" opacity="0.6"/>
+    <path d="M50 60 Q70 40, 90 60 Q70 80, 50 60" fill="url(#leafGradient)" opacity="0.5"/>
+    <path d="M20 70 Q40 50, 60 70 Q40 90, 20 70" fill="url(#leafGradient)" opacity="0.7"/>
+    
+    {/* Leaf veins */}
+    <path d="M30 40 Q50 40, 70 40" stroke="#6b7b56" strokeWidth="1" opacity="0.8"/>
+    <path d="M50 60 Q70 60, 90 60" stroke="#6b7b56" strokeWidth="1" opacity="0.7"/>
+    <path d="M20 70 Q40 70, 60 70" stroke="#6b7b56" strokeWidth="1" opacity="0.9"/>
+    
+    {/* Small decorative leaves */}
+    <ellipse cx="80" cy="30" rx="8" ry="12" fill="#c17358" opacity="0.4" transform="rotate(45 80 30)"/>
+    <ellipse cx="40" cy="25" rx="6" ry="9" fill="#e3e1d9" opacity="0.5" transform="rotate(-30 40 25)"/>
+    <ellipse cx="90" cy="85" rx="7" ry="10" fill="#8b9471" opacity="0.4" transform="rotate(60 90 85)"/>
+  </svg>
+);
+
+// Export all components as a namespace for backward compatibility
+export const Illustrations = {
+  TreeSilhouette,
+  FlowerBunch,
+  GrassCluster,
+  LeafPattern,
+  GrassIllustration,
+  PeopleConnectingIllustration,
+  AIBrainIllustration,
+  SmartOrganizationIllustration,
+  CommunityIllustration,
+  EventsIllustration,
+  WelcomeIllustration,
+  SmallDecorationIllustration,
+};

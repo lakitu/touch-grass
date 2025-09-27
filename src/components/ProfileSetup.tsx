@@ -3,7 +3,6 @@ import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Checkbox } from './ui/checkbox';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 import { Badge } from './ui/badge';
 import { X } from 'lucide-react';
@@ -22,16 +21,9 @@ export function ProfileSetup({ onNext, onProfileUpdate }: ProfileSetupProps) {
   const [groupSize, setGroupSize] = useState('');
   const [genderPreference, setGenderPreference] = useState('');
   const [timePreference, setTimePreference] = useState('');
-  const [activityTypes, setActivityTypes] = useState<string[]>([]);
-
   const predefinedInterests = [
     'Sports', 'Gaming', 'Music', 'Art', 'Technology', 'Food', 'Movies', 
     'Fitness', 'Reading', 'Travel', 'Photography', 'Dance'
-  ];
-
-  const predefinedActivities = [
-    'Parties', 'Study Groups', 'Sports Events', 'Club Meetings', 
-    'Cultural Events', 'Outdoor Activities', 'Workshops', 'Social Gatherings'
   ];
 
   const addInterest = (interest: string) => {
@@ -45,14 +37,6 @@ export function ProfileSetup({ onNext, onProfileUpdate }: ProfileSetupProps) {
     setInterests(interests.filter(i => i !== interest));
   };
 
-  const toggleActivityType = (activity: string) => {
-    if (activityTypes.includes(activity)) {
-      setActivityTypes(activityTypes.filter(a => a !== activity));
-    } else {
-      setActivityTypes([...activityTypes, activity]);
-    }
-  };
-
   const handleSubmit = () => {
     const profile: UserProfile = {
       name,
@@ -61,8 +45,7 @@ export function ProfileSetup({ onNext, onProfileUpdate }: ProfileSetupProps) {
       preferences: {
         groupSize,
         genderPreference,
-        timePreference,
-        activityTypes
+        timePreference
       },
       community: ''
     };
@@ -71,7 +54,7 @@ export function ProfileSetup({ onNext, onProfileUpdate }: ProfileSetupProps) {
     onNext();
   };
 
-  const isFormValid = name && year && interests.length > 0 && groupSize && genderPreference && timePreference && activityTypes.length > 0;
+  const isFormValid = name && year && interests.length > 0 && groupSize && genderPreference && timePreference;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
@@ -85,12 +68,12 @@ export function ProfileSetup({ onNext, onProfileUpdate }: ProfileSetupProps) {
           {/* Basic Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Public Username</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
+                placeholder="How others will see you (e.g., @username)"
               />
             </div>
             
@@ -144,16 +127,37 @@ export function ProfileSetup({ onNext, onProfileUpdate }: ProfileSetupProps) {
             </div>
             
             {interests.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3">
-                {interests.map((interest) => (
-                  <Badge key={interest} className="flex items-center gap-1">
-                    {interest}
-                    <X 
-                      className="w-3 h-3 cursor-pointer" 
-                      onClick={() => removeInterest(interest)}
-                    />
-                  </Badge>
-                ))}
+              <div className="mt-3">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm text-muted-foreground">Selected interests:</p>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setInterests([])}
+                    className="h-7 px-2 text-xs text-muted-foreground hover:text-destructive"
+                  >
+                    Clear All
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {interests.map((interest) => (
+                    <Badge key={interest} className="flex items-center gap-1 pr-1">
+                      {interest}
+                      <button
+                        type="button"
+                        className="ml-1 hover:bg-destructive/20 rounded-full p-0.5 transition-colors"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          removeInterest(interest);
+                        }}
+                      >
+                        <X className="w-3 h-3 hover:text-destructive transition-colors" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -219,22 +223,6 @@ export function ProfileSetup({ onNext, onProfileUpdate }: ProfileSetupProps) {
                 <Label htmlFor="flexible">Flexible</Label>
               </div>
             </RadioGroup>
-          </div>
-
-          <div>
-            <Label>Activity Types You're Interested In</Label>
-            <div className="grid grid-cols-2 gap-3 mt-2">
-              {predefinedActivities.map((activity) => (
-                <div key={activity} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={activity}
-                    checked={activityTypes.includes(activity)}
-                    onCheckedChange={() => toggleActivityType(activity)}
-                  />
-                  <Label htmlFor={activity} className="text-sm">{activity}</Label>
-                </div>
-              ))}
-            </div>
           </div>
 
           <Button 

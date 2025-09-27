@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { 
   Calendar,
@@ -26,11 +26,10 @@ interface EventConfirmation {
   venue: string;
   attendees: number;
   image: string;
-  organizerMessage: string;
+  reminders: string[];
   lastMinuteDetails: string[];
   weatherInfo?: string;
   parkingInfo?: string;
-  contactInfo: string;
 }
 
 interface EventConfirmationNotificationProps {
@@ -38,20 +37,25 @@ interface EventConfirmationNotificationProps {
   onDismiss: () => void;
   onAddToCalendar: (event: EventConfirmation) => void;
   onGetDirections: (venue: string) => void;
+  onJoinGroupChat?: (eventId: string) => void;
+  calendarEvents: any[];
 }
 
 export function EventConfirmationNotification({ 
   confirmation, 
   onDismiss, 
   onAddToCalendar,
-  onGetDirections 
+  onGetDirections,
+  onJoinGroupChat,
+  calendarEvents
 }: EventConfirmationNotificationProps) {
   const [showFullDetails, setShowFullDetails] = useState(false);
-  const [isAddedToCalendar, setIsAddedToCalendar] = useState(false);
+  
+  // Check if event is already in calendar
+  const isAddedToCalendar = calendarEvents.some(event => event.id === confirmation.id);
 
   const handleAddToCalendar = () => {
     onAddToCalendar(confirmation);
-    setIsAddedToCalendar(true);
     
     // Create calendar event data
     const startDate = new Date(`${confirmation.date} ${confirmation.time}`);
@@ -147,6 +151,17 @@ export function EventConfirmationNotification({
               {isAddedToCalendar ? 'Added to Calendar' : 'Add to Calendar'}
             </Button>
             
+            {onJoinGroupChat && (
+              <Button 
+                onClick={() => onJoinGroupChat(confirmation.id)}
+                className="flex-1 sm:flex-none bg-primary/10 hover:bg-primary/20 text-primary border-primary/30"
+                variant="outline"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Group Chat
+              </Button>
+            )}
+            
             <Button 
               variant="outline" 
               onClick={() => onGetDirections(confirmation.venue)}
@@ -165,15 +180,23 @@ export function EventConfirmationNotification({
             </Button>
           </div>
 
-          {/* Organizer Message Preview */}
-          {confirmation.organizerMessage && (
+          {/* Event Reminders Preview */}
+          {confirmation.reminders && confirmation.reminders.length > 0 && (
             <div className="mt-4 p-4 bg-accent/50 rounded-lg border-organic">
-              <p className="text-sm text-muted-foreground mb-2">Message from organizer:</p>
-              <p className="text-sm italic">
-                "{confirmation.organizerMessage.length > 100 
-                  ? confirmation.organizerMessage.substring(0, 100) + '...' 
-                  : confirmation.organizerMessage}"
-              </p>
+              <p className="text-sm text-muted-foreground mb-2">Event reminders:</p>
+              <ul className="space-y-1">
+                {confirmation.reminders.slice(0, 2).map((reminder, index) => (
+                  <li key={index} className="text-sm flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
+                    {reminder}
+                  </li>
+                ))}
+                {confirmation.reminders.length > 2 && (
+                  <li className="text-sm text-muted-foreground italic">
+                    +{confirmation.reminders.length - 2} more reminders...
+                  </li>
+                )}
+              </ul>
             </div>
           )}
         </CardContent>
@@ -187,6 +210,9 @@ export function EventConfirmationNotification({
               <PartyPopper className="w-5 h-5 text-primary" />
               Event Details - {confirmation.title}
             </DialogTitle>
+            <DialogDescription>
+              View complete details for your confirmed event including location, timing, organizer message, and important updates.
+            </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-6">
@@ -242,19 +268,33 @@ export function EventConfirmationNotification({
                 )}
 
                 <div className="p-4 bg-accent/30 rounded-lg border-organic">
-                  <h4 className="font-medium mb-2">Contact</h4>
-                  <p className="text-sm">{confirmation.contactInfo}</p>
+                  <h4 className="font-medium mb-2">Event Reminders</h4>
+                  <ul className="space-y-1">
+                    {confirmation.reminders.map((reminder, index) => (
+                      <li key={index} className="text-sm flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
+                        {reminder}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>
 
-            {/* Organizer Message */}
+            {/* Event Reminders */}
             <div className="p-4 bg-primary/5 rounded-lg border-organic">
               <h4 className="font-medium mb-3 flex items-center gap-2">
                 <MessageCircle className="w-4 h-4 text-primary" />
-                Message from Organizer
+                Event Reminders
               </h4>
-              <p className="text-sm leading-relaxed">{confirmation.organizerMessage}</p>
+              <ul className="space-y-2">
+                {confirmation.reminders.map((reminder, index) => (
+                  <li key={index} className="text-sm flex items-start gap-2 leading-relaxed">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
+                    {reminder}
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* Last Minute Details */}

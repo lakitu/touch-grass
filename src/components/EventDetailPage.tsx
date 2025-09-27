@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback } from './ui/avatar';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Checkbox } from './ui/checkbox';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
@@ -23,7 +23,8 @@ import {
   Wifi,
   Car,
   Music,
-  Star
+  Star,
+  Sparkles
 } from 'lucide-react';
 
 interface EventDetails {
@@ -293,22 +294,23 @@ export function EventDetailPage({ event, onBack, onRSVP }: EventDetailPageProps)
               </CardContent>
             </Card>
 
-            {/* Organizer */}
+            {/* AI Organized Event Info */}
             <Card className="texture-organic shadow-natural">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <Avatar className="w-12 h-12">
-                    <AvatarFallback>
-                      {event.organizer.split(' ').map(n => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Sparkles className="w-6 h-6 text-primary" />
+                  </div>
                   <div className="flex-1">
-                    <h4 className="font-medium mb-1">Hosted by {event.organizer}</h4>
-                    <p className="text-sm text-muted-foreground mb-3">{event.organizerBio}</p>
-                    <Button variant="outline" size="sm" className="border-organic">
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Message Host
-                    </Button>
+                    <h4 className="font-medium mb-1">AI-Organized Event</h4>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      This event was intelligently matched and organized by Touch Grass AI based on participant preferences and interests.
+                    </p>
+                    <div className="text-xs text-muted-foreground space-y-1">
+                      <p>• Automatic coordination & scheduling</p>
+                      <p>• Matched participants with similar interests</p>
+                      <p>• No individual organizer required</p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -322,6 +324,9 @@ export function EventDetailPage({ event, onBack, onRSVP }: EventDetailPageProps)
         <DialogContent className="max-w-md texture-paper">
           <DialogHeader>
             <DialogTitle>RSVP to {event.title}</DialogTitle>
+            <DialogDescription>
+              Please confirm your attendance and provide any additional details for this event.
+            </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4">

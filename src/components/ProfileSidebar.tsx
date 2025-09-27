@@ -3,15 +3,16 @@ import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Separator } from './ui/separator';
-import { Edit, MapPin, Clock, Users, Heart } from 'lucide-react';
+import { Edit, MapPin, Clock, Users, Heart, LogOut } from 'lucide-react';
 import { UserProfile } from '../App';
 
 interface ProfileSidebarProps {
   userProfile: UserProfile;
   onEdit: () => void;
+  onLogout?: () => void;
 }
 
-export function ProfileSidebar({ userProfile, onEdit }: ProfileSidebarProps) {
+export function ProfileSidebar({ userProfile, onEdit, onLogout }: ProfileSidebarProps) {
   const getGroupSizeLabel = (size: string) => {
     switch (size) {
       case 'small': return 'Small groups (2-5)';
@@ -98,11 +99,11 @@ export function ProfileSidebar({ userProfile, onEdit }: ProfileSidebarProps) {
           <Separator />
 
           <div>
-            <h4 className="text-sm text-foreground mb-2">Activity Types</h4>
+            <h4 className="text-sm text-foreground mb-2">Interests</h4>
             <div className="flex flex-wrap gap-1">
-              {userProfile.preferences.activityTypes.map((activity) => (
-                <Badge key={activity} variant="outline" className="text-xs">
-                  {activity}
+              {userProfile.interests.map((interest) => (
+                <Badge key={interest} variant="outline" className="text-xs">
+                  {interest}
                 </Badge>
               ))}
             </div>
@@ -129,6 +130,21 @@ export function ProfileSidebar({ userProfile, onEdit }: ProfileSidebarProps) {
           </div>
         </CardContent>
       </Card>
+
+      {onLogout && (
+        <Card>
+          <CardContent className="pt-6">
+            <Button 
+              variant="outline" 
+              onClick={onLogout}
+              className="w-full border-destructive/30 text-destructive hover:bg-destructive/5"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
